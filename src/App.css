@@ -30,3 +30,16 @@
     transform: rotate(360deg);
   }
 }
+
+.app-container {
+  padding: 64px;
+}
+
+h1 {
+  font-family: 'serif';
+}
+
+.footer {
+  text-align: center;
+  font-style: italic;
+}
