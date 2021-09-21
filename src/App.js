@@ -10,8 +10,9 @@ class App extends Component {
         <Header />
         <div className="app-container">
           <h1>SOLAR BEATS</h1>
-          <h2>Solar beats is a web app designed to provide music selection based on your local weather</h2>
-          <iframe 
+          <h2>Built using React.js and Netlify — designed to provide music selection based on your local weather</h2>
+          <iframe
+            title="soundcloud" 
             width="100%" 
             height="300" 
             scrolling="no" 
@@ -33,17 +34,6 @@ class App extends Component {
               fontWeight: 100
             }}
           >
-            <a 
-              href="https://soundcloud.com/pictochat" 
-              title="pax" 
-              target="_blank" 
-              style={{
-                color: '#cccccc',
-                textDecoration: 'none'
-              }}
-            >
-              pax
-            </a> · <a href="https://soundcloud.com/pictochat/wayifeelwhenweetalked" title="WAYIFEEL" target="_blank" style={{color: '#cccccc', textDecoration: 'none'}}>WAYIFEEL</a>
           </div>
         </div>
         <Footer />
