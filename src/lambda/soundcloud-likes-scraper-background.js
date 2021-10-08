@@ -23,6 +23,8 @@
 
 require('dotenv').config()
 
+import fetch from "node-fetch"
+
 const chromium = require('chrome-aws-lambda')
 const puppeteer = require('puppeteer-core')
 
@@ -53,6 +55,11 @@ async function autoScroll(page){
 
 export async function handler(event, context, callback) {
 
+    const { SITE_URL } = process.env.SITE_URL
+    const destination = `${
+        SITE_URL || "http://localhost:9999"
+    }/.netlify/functions/hello`
+
     const browser = await puppeteer.launch({
         args: chromium.args,
         executablePath: process.env.CHROME_EXECUTABLE_PATH || await chromium.executablePath,
@@ -60,6 +67,8 @@ export async function handler(event, context, callback) {
     });
 
     const page = await browser.newPage();
+
+    console.log("Opening browser...")
 
     await page.goto('https://soundcloud.com/shay-leon-2/likes');
     await page.setViewport({
@@ -96,7 +105,9 @@ export async function handler(event, context, callback) {
      * 
      */
 
-    // await autoScroll(page);
+    console.log("Scrolling to bottom of likes page...")
+
+    await autoScroll(page);
 
     const title = await page.title();
     const results = await page.$$eval('div.soundTitle__usernameTitleContainer', (items) => {
@@ -110,14 +121,31 @@ export async function handler(event, context, callback) {
 
     await browser.close();
 
-    return {
-        statusCode: 200,
-        body: JSON.stringify({
-            status: 'Ok',
-            page: {
-                title,
-                results
-            }
+    console.log(`Sending data to destination: ${destination}...`)
+
+    // so background functions now work, we need to pass the scraped data after the web scrape is completed
+
+    try {
+        fetch(destination, {
+            method: "POST",
+            body: JSON.stringify({
+                page: {
+                    results
+                }
+            })
         })
-    };
+    } catch (err) {
+        console.log(`Fetch failed 😒 ${err}`)
+    }
+
+    // return {
+    //     statusCode: 200,
+    //     body: JSON.stringify({
+    //         status: 'Ok',
+    //         page: {
+    //             title,
+    //             results
+    //         }
+    //     })
+    // };
 }
