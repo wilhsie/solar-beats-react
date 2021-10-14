@@ -3,21 +3,8 @@
  *   - When given a soundcloud username,
  *     returns all the songs the user has liked on soundcloud
  * 
- *   Okay UPDATE: basically puppeteer isn't working for som reason idk
- *   running into this: 
- *  
- *   TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
- * 
- *   wat da hek, gonn do mor research
- * 
  *  UPDATE: Okay, following this video / website:
  *   - https://spacejelly.dev/posts/how-to-use-puppeteer-to-automate-chrome-in-an-api-with-netlify-serverless-functions/
- * 
- *   TODO: dotenv package doesn't seem to be working / process.env.CHROME_EXECUTABLE_PATH returns undefined
- *   even though we've defined it in our .env file??? hm
- * 
- *   TODO: Okay we got dotenv working with the require('dotenv').config(), now all we need to do is figure out how to select
- *   things using puppeteer and we GOLDEN lol
  * 
 **/
 
@@ -77,32 +64,12 @@ export async function handler(event, context, callback) {
     });
 
     /**
-     * Okay so we're able to grab all the artist names and track names from the DOM
-     * but first we want to scroll alll the way to the bottom before running our $$eval
-     * okeh how we do dat ...
+     * Scroll to bottom, grab track information (artist, track title, track url, cover art)
      */
 
     /**
-     * 
-     * okay so .. we're not sure if autoScrolling works or not cause ... we get a 10 second time out before
-     * we can see any results .. sooooo
-     * one option is to create this thing called a "background" function
-     * which is a feature of netlify .. and background functions will allow me to increase the timeout
-     * to 15 minutes ...
-     * 
-     * so .. before considering upgrading to the 19/month netlify tier .. can we increase the timeout limit
-     * without doing so?
-     * 
-     * going to look into this error msg:
-     * Your lambda function took longer than 10 seconds to finish.
-     * If you need a longer execution time, you can increase the timeout using the -t or --timeout flag.
-     * Please note that default function invocation is 10 seconds, 
-     * check our documentation for more information (https://www.netlify.com/docs/functions/#custom-deployment-options)
-     * 
-     * okay couple options:
-     *  - parallelize scraping calls better ... (not guaranteed to work .. )
-     *  - experiment with background functions (not sure how we will return the scraped data, apparently you need "outside sources" to monitor bg function responses)
-     * 
+     * Run background functions locally using:
+     * `netlify functions:serve`
      */
 
     console.log("Scrolling to bottom of likes page...")
@@ -123,7 +90,16 @@ export async function handler(event, context, callback) {
 
     console.log(`Sending data to destination: ${destination}...`)
 
-    // so background functions now work, we need to pass the scraped data after the web scrape is completed
+    // we're now able to get data back from our background functions by doing a fetch after the scrape
+    // as described in this video (at about 17ish minutes in):
+    // https://www.youtube.com/watch?v=HYA-SYZWYWU&ab_channel=UncaughtException
+
+    // okay .. so .. i'm not sure why I can't pass the data we scraped to the front end .. 
+    // trying to resolve any potential CORS issues by using setupProxy.js as explained in this video:
+    // https://www.youtube.com/watch?v=3ldSM98nCHI&ab_channel=swyx
+
+    // we're currently having an issue passing the data we receive from our web scrape to our react front end
+    // UPDATE: don't use npm run start, use `netlify dev` it fixes react POST to serverless function issue
 
     try {
         fetch(destination, {
@@ -137,15 +113,4 @@ export async function handler(event, context, callback) {
     } catch (err) {
         console.log(`Fetch failed 😒 ${err}`)
     }
-
-    // return {
-    //     statusCode: 200,
-    //     body: JSON.stringify({
-    //         status: 'Ok',
-    //         page: {
-    //             title,
-    //             results
-    //         }
-    //     })
-    // };
 }

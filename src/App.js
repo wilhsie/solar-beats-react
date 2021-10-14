@@ -2,8 +2,10 @@ import React, { Component } from "react"
 import Header from './components/header';
 import Footer from './components/footer';
 import "./App.css"
+import fetch from "node-fetch"
 
 class App extends Component {
+  state = {message: 'DEFAULT MESSAGE'}
   render() {
     return (
       <>
@@ -37,6 +39,16 @@ class App extends Component {
           >
           </div>
         </div>
+
+        <p>Message: {this.state.message}</p>
+
+        <button onClick={() => 
+          fetch('/.netlify/functions/soundcloud-likes-scraper-background')
+          .then(res => res.json())
+          .then(({ message }) => this.setState({ message }))
+          }>
+          CLICK ME
+        </button>
         <Footer />
       </>
     )
