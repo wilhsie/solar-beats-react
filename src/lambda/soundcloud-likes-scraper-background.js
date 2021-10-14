@@ -98,8 +98,10 @@ export async function handler(event, context, callback) {
     // trying to resolve any potential CORS issues by using setupProxy.js as explained in this video:
     // https://www.youtube.com/watch?v=3ldSM98nCHI&ab_channel=swyx
 
-    // we're currently having an issue passing the data we receive from our web scrape to our react front end
     // UPDATE: don't use npm run start, use `netlify dev` it fixes react POST to serverless function issue
+
+    // TODO: allow react to consume data scraped by soundcloud-likes-scraper-background
+    // TODO: wrangle proper data from given user's soundcloud likes, i.e. scroll-to-bottom is not working properly
 
     try {
         fetch(destination, {

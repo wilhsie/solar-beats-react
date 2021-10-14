@@ -2,6 +2,11 @@
 
 `netlify functions:serve` will launch a dev server dedicated to serverless functions
 
+ use `netlify dev` it fixes react POST to serverless function issue, don't use `npm run start`
+ 
+ TODO: allow react to consume data scraped by soundcloud-likes-scraper-background
+ TODO: wrangle proper data from given user's soundcloud likes, i.e. scroll-to-bottom is not working properly
+
 ## Create-React-App-Lambda
 
 This project is a reference demo showing you how to use [Create React App v3](https://github.com/facebookincubator/create-react-app) and [netlify-lambda v1](https://github.com/netlify/netlify-lambda) together in a [Netlify Dev](https://www.netlify.com/docs/cli/?utm_source=github&utm_medium=swyx-CRAL&utm_campaign=devex#netlify-dev-beta) workflow. You can clone this and immediately be productive with a React app with serverless Netlify Functions in the same repo. Alternatively you can deploy straight to Netlify with this one-click Deploy:
