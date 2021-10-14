@@ -1,10 +1,11 @@
 ## Test soundcloud-likes-scraper-background.js in dev
 
-`netlify functions:serve` will launch a dev server dedicated to serverless functions
+`netlify functions:serve` will launch serverless function dev server
 
- use `netlify dev` it fixes react POST to serverless function issue, don't use `npm run start`
+ use `netlify dev` to launch netlify dev server a.k.a. don't use `npm run start`
  
  TODO: allow react to consume data scraped by soundcloud-likes-scraper-background
+ 
  TODO: wrangle proper data from given user's soundcloud likes, i.e. scroll-to-bottom is not working properly
 
 ## Create-React-App-Lambda
