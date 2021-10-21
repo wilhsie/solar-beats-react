@@ -5,7 +5,11 @@ import "./App.css"
 import fetch from "node-fetch"
 
 class App extends Component {
-  state = {message: 'DEFAULT MESSAGE'}
+  state = {
+    message: 'DEFAULT MESSAGE',
+    tracks: []
+  }
+
   render() {
     return (
       <>
@@ -41,14 +45,22 @@ class App extends Component {
         </div>
 
         <p>Message: {this.state.message}</p>
+        <p>Liked Tracks: {this.state.tracks}</p>
 
-        <button onClick={() => 
-          fetch('/.netlify/functions/soundcloud-likes-scraper-background')
-          .then(res => res.json())
-          .then(({ message }) => this.setState({ message }))
+        <button onClick={async () => 
+        this.setState({
+          tracks: await fetch('/.netlify/functions/db-get-liked-tracks')
+          .then(response => response.json())
+          .then((user) => {
+            console.log(user.tracks)
+            return user.tracks[0].track_name
+          })
+        })
           }>
           CLICK ME
         </button>
+        {console.log(`tracks: ${this.state.tracks}`)}
+        {/*<LikedTrack listOfTrackAttributes={track} />*/}
         <Footer />
       </>
     )

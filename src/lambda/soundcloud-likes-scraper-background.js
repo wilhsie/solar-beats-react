@@ -11,9 +11,19 @@
 require('dotenv').config()
 
 import fetch from "node-fetch"
+import faunadb from "faunadb"
 
 const chromium = require('chrome-aws-lambda')
 const puppeteer = require('puppeteer-core')
+
+/**
+ * Original Fauna DB example code: https://github.com/netlify/netlify-faunadb-example
+ */
+
+const q = faunadb.query
+const client = new faunadb.Client({
+    secret: process.env.FAUNADB_SERVER_KEY
+})
 
 /**
  * Got this function from here:
@@ -112,6 +122,8 @@ export async function handler(event, context, callback) {
                 }
             })
         })
+        .then(response => response.json())
+        .then(data => console.log(data))
     } catch (err) {
         console.log(`Fetch failed 😒 ${err}`)
     }
