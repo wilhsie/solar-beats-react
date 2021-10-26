@@ -1,12 +1,19 @@
 import React, { Component } from "react"
 
 class LikedTrack extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            data: this.props.listOfTracks
+        }
+    }
     render() {
         return (
-            <div>
-                {this.props.listOfTrackAttributes}
+            <div class="liked-track-container">
+                <a href={this.state.data[3]}> <img src={this.state.data[2]}/> </a>
+                <p>{this.state.data[0]} · {this.state.data[1]}</p>
             </div>
-        )
+        );
     }
 }
 

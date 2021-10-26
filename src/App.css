@@ -42,4 +42,15 @@ h1 {
 .footer {
   text-align: center;
   font-style: italic;
+  padding: 32px;
+}
+
+.liked-track-container {
+  text-align: center;
+  padding: 32px;
+}
+
+.liked-track-container img {
+  width: 256px;
+  height: 256px;
 }

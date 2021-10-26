@@ -1,13 +1,52 @@
 import React, { Component } from "react"
 import Header from './components/header';
 import Footer from './components/footer';
+import LikedTrack from './components/likedTrack';
 import "./App.css"
 import fetch from "node-fetch"
 
 class App extends Component {
   state = {
-    message: 'DEFAULT MESSAGE',
-    tracks: []
+    tracks: [],
+    handleClickBool: false
+  }
+
+  async handleClick() {
+
+    /**
+     * it seems like we want to fetch the data on handleClick, butttttt
+     * we can't render onClick, so we need to store the data, and then render seperately..?
+     * 
+     */
+
+    let tracks = await fetch('/.netlify/functions/db-get-liked-tracks')
+    .then(response => response.json())
+    .then((user) => {
+      // console.log(user.tracks)
+      return user.tracks
+    })
+    // console.log(tracks)
+
+    // so react can't store objects in setState keys, lets try to extract our track objects to be lists perhaps?
+
+    let trackInfo = []
+    let trackList = []
+
+    tracks.forEach((t) => {
+      trackInfo.push(t.track_name)
+      trackInfo.push(t.track_artist)
+      trackInfo.push(t.track_img)
+      trackInfo.push(t.track_url)
+      trackList.push(trackInfo)
+      trackInfo = []
+    })
+
+    // console.log(trackList)
+
+    this.setState({
+      tracks: trackList,
+      handleClickBool: true
+    })
   }
 
   render() {
@@ -44,23 +83,14 @@ class App extends Component {
           </div>
         </div>
 
-        <p>Message: {this.state.message}</p>
-        <p>Liked Tracks: {this.state.tracks}</p>
-
-        <button onClick={async () => 
-        this.setState({
-          tracks: await fetch('/.netlify/functions/db-get-liked-tracks')
-          .then(response => response.json())
-          .then((user) => {
-            console.log(user.tracks)
-            return user.tracks[0].track_name
-          })
-        })
-          }>
-          CLICK ME
+        <button onClick={() => this.handleClick()}>
+          Get List Of Likes
         </button>
-        {console.log(`tracks: ${this.state.tracks}`)}
-        {/*<LikedTrack listOfTrackAttributes={track} />*/}
+        {
+        this.state.handleClickBool 
+        ?  this.state.tracks.map((track) => <LikedTrack listOfTracks={track} />)
+        : console.log(this.state.handleClickBool)
+        }
         <Footer />
       </>
     )
