@@ -85,12 +85,14 @@ class App extends Component {
           <button onClick={() => this.handleClick()}>
             Get List Of Likes
           </button>
-
-          {
-          this.state.handleClickBool 
-          ?  this.state.tracks.map((track) => <LikedTrack listOfTracks={track} />)
-          : console.log(this.state.handleClickBool)
-          }
+          
+          <div className="all-liked-tracks-container">
+            {
+            this.state.handleClickBool 
+            ?  this.state.tracks.map((track) => <LikedTrack listOfTracks={track} />)
+            : console.log(this.state.handleClickBool)
+            }
+          </div>
           
         </div>
         <Footer />

@@ -45,6 +45,10 @@ h1 {
   padding-bottom: 32px;
 }
 
+.all-liked-tracks-container {
+  display: flex;
+}
+
 .liked-track-container {
   text-align: center;
   padding: 32px;

@@ -8,6 +8,8 @@
 
  TODO: wrangle proper data from given user's soundcloud likes, i.e. scroll-to-bottom is not working properly
 
+ TODO: scroll to bottom takes long time, also need to write db-update-liked-tracks and have our scraper dump the data there
+
 ## Create-React-App-Lambda
 
 Original project at https://github.com/netlify/create-react-app-lambda

@@ -45,9 +45,68 @@ async function autoScroll(page){
                     clearInterval(timer);
                     resolve();
                 }
-            }, 100);
+            }, 200);
         });
     });
+}
+
+/**
+ * Merge two lists of objects
+ * 
+ * Order of lists matters, index must correspond to correct track data
+ * 
+ * i.e.
+ * 
+ * foo = 
+ * [
+ *   {
+ *     track_name: 'WAYIFEEL',
+ *     track_artist: 'pax'
+ *   },
+ *   {
+ *     track_name: 'houseplants',
+ *     track_artist: 'rob smyles'
+ *   }
+ * ]
+ * 
+ * bar = 
+  * [
+ *   {
+ *     track_url: 'https://soundcloud.com/pictochat/wayifeelwhenweetalked',
+ *     track_img: 'https://i1.sndcdn.com/artworks-000408863781-7j5i38-t500x500.jpg'
+ *   },
+ *   {
+ *     track_url: 'https://soundcloud.com/robbing-smiles/houseplants',
+ *     track_img: 'https://i1.sndcdn.com/artworks-dyg1XflU5JrmY9ZY-DsOGPg-t500x500.jpg'
+ *   }
+ * ]
+ * 
+ * output = 
+ * [
+ *   {
+ *     track_name: 'WAYIFEEL',
+ *     track_artist: 'pax',
+ *     track_url: 'https://soundcloud.com/pictochat/wayifeelwhenweetalked',
+ *     track_img: 'https://i1.sndcdn.com/artworks-000408863781-7j5i38-t500x500.jpg'
+ *   },
+ *   {
+ *     track_name: 'houseplants',
+ *     track_artist: 'rob smyles'
+ *     track_url: 'https://soundcloud.com/robbing-smiles/houseplants',
+ *     track_img: 'https://i1.sndcdn.com/artworks-dyg1XflU5JrmY9ZY-DsOGPg-t500x500.jpg'
+ *   }
+ * ]
+ * 
+ * @param listOfObjects foo 
+ * @param listOfObjects bar 
+ */
+function mergeResults(foo, bar) {
+    foo.forEach((obj, i) => {
+        obj['track_url'] = bar[i].track_url;
+        obj['track_img'] = bar[i].track_img;
+    })
+
+    return foo;
 }
 
 export async function handler(event, context, callback) {
@@ -67,7 +126,7 @@ export async function handler(event, context, callback) {
 
     console.log("Opening browser...")
 
-    await page.goto('https://soundcloud.com/shay-leon-2/likes');
+    await page.goto('https://soundcloud.com/shay-leon-2/likes', {waitUntil: 'domcontentloaded'});
     await page.setViewport({
         width: 1200,
         height: 800
@@ -86,15 +145,46 @@ export async function handler(event, context, callback) {
 
     await autoScroll(page);
 
-    const title = await page.title();
-    const results = await page.$$eval('div.soundTitle__usernameTitleContainer', (items) => {
+    // const results = await page.$$eval('div.sound__body', (items) => {
+    //     return items.map(item => {
+    //         return {
+    //             track_name: item.children[1].children[0].children[0].children[0].children[1].children[1].innerText,
+    //             track_artist: item.children[1].children[0].children[0].children[0].children[1].children[0].children[0].innerText,
+    //             track_url: item.children[0].children[0].href,
+    //             track_img: item.children[0].children[0].children[0].children[0].attributes.style.value.slice(62,-3)
+    //         }
+    //     })
+    // });
+
+
+    // const scrapedData = await page.evaluate(() =>
+    //     Array.from(document.querySelectorAll('div.sound__body'))
+    //       .map(item => ({
+    //             track_url: item.children[0].children[0].href,
+    //             track_img: item.children[0].children[0].children[0].children[0].attributes.style.value.slice(62,-3)
+    //         })))
+
+    // console.log(scrapedData);
+
+    const urlImgResults = await page.$$eval('div.sound__body', (items) => {
         return items.map(item => {
             return {
-                artist: item.children[0].children[0].children[0].innerHTML,
-                track: item.children[1].children[0].innerHTML
+                track_url: item.children[0].children[0].href,
+                track_img: item.children[0].children[0].children[0].children[0].attributes.style.value.slice(62,-3)
             }
         })
     });
+
+    const results = await page.$$eval('div.soundTitle__usernameTitleContainer', (items) => {
+        return items.map(item => {
+            return {
+                track_name: item.children[1].children[0].innerText,
+                track_artist: item.children[0].children[0].children[0].innerText
+            }
+        })
+    });
+
+    let mergedResults = mergeResults(results, urlImgResults);
 
     await browser.close();
 
@@ -118,7 +208,7 @@ export async function handler(event, context, callback) {
             method: "POST",
             body: JSON.stringify({
                 page: {
-                    results
+                    mergedResults
                 }
             })
         })
