@@ -11,6 +11,7 @@ class App extends Component {
         <div className="app-container">
           <h1>SOLAR BEATS</h1>
           <h2>Built using React.js and Netlify</h2>
+          <p>Hello! My name is Wil.  I'm a <a href="https://github.com/wilhsie">software engineer</a>, dancer, and music producer.  Thanks for stopping by.</p>
           <iframe
             title="soundcloud" 
             width="100%" 
