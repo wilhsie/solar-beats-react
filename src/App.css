@@ -47,6 +47,9 @@ h1 {
 
 .all-liked-tracks-container {
   display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+  width: 100%;
 }
 
 .liked-track-container {

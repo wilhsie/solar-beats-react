@@ -18,7 +18,7 @@ exports.handler = async (event, context) => {
     return client.query(q.Get(q.Ref(q.Collection('liked-tracks'), process.env.TEST_DOCUMENT)))
     .then((response) => {
         const data = response.data;
-        console.log(`liked-tracks: ${JSON.stringify(data)}`);
+        //console.log(`liked-tracks: ${JSON.stringify(data)}`);
         return {
             statusCode: 200,
             body: JSON.stringify(data)

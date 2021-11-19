@@ -55,7 +55,7 @@ class App extends Component {
         <Header />
         <div className="app-container">
           <h1>SOLAR BEATS</h1>
-          <h2>Built using React.js and Netlify — designed to provide music selection based on your local weather</h2>
+          <h2>Built using React.js and Netlify</h2>
           <p>Okay, new idea... "SoundCloud Viewer Tool" - Makes it easier to view your liked tracks on soundcloud</p>
           <iframe
             title="soundcloud" 

@@ -114,7 +114,7 @@ export async function handler(event, context, callback) {
     const { SITE_URL } = process.env.SITE_URL
     const destination = `${
         SITE_URL || "http://localhost:9999"
-    }/.netlify/functions/hello`
+    }/.netlify/functions/db-post-liked-tracks`
 
     const browser = await puppeteer.launch({
         args: chromium.args,
@@ -206,11 +206,7 @@ export async function handler(event, context, callback) {
     try {
         fetch(destination, {
             method: "POST",
-            body: JSON.stringify({
-                page: {
-                    mergedResults
-                }
-            })
+            body: JSON.stringify({ data: { tracks: mergedResults } })
         })
         .then(response => response.json())
         .then(data => console.log(data))
