@@ -1,9 +1,54 @@
 import React, { Component } from "react"
 import Header from './components/header';
 import Footer from './components/footer';
+import LikedTrack from './components/likedTrack';
 import "./App.css"
+import fetch from "node-fetch"
 
 class App extends Component {
+  state = {
+    tracks: [],
+    handleClickBool: false
+  }
+
+  async handleClick() {
+
+    /**
+     * it seems like we want to fetch the data on handleClick, butttttt
+     * we can't render onClick, so we need to store the data, and then render seperately..?
+     * 
+     */
+
+    let tracks = await fetch('/.netlify/functions/db-get-liked-tracks')
+    .then(response => response.json())
+    .then((user) => {
+      // console.log(user.tracks)
+      return user.tracks
+    })
+    // console.log(tracks)
+
+    // so react can't store objects in setState keys, lets try to extract our track objects to be lists perhaps?
+
+    let trackInfo = []
+    let trackList = []
+
+    tracks.forEach((t) => {
+      trackInfo.push(t.track_name)
+      trackInfo.push(t.track_artist)
+      trackInfo.push(t.track_img)
+      trackInfo.push(t.track_url)
+      trackList.push(trackInfo)
+      trackInfo = []
+    })
+
+    // console.log(trackList)
+
+    this.setState({
+      tracks: trackList,
+      handleClickBool: true
+    })
+  }
+
   render() {
     return (
       <>
@@ -11,7 +56,7 @@ class App extends Component {
         <div className="app-container">
           <h1>SOLAR BEATS</h1>
           <h2>Built using React.js and Netlify</h2>
-          <p>Hello! My name is Wil.  I'm a <a href="https://github.com/wilhsie">software engineer</a>, dancer, and music producer.  Thanks for stopping by.</p>
+          <p>Okay, new idea... "SoundCloud Viewer Tool" - Makes it easier to view your liked tracks on soundcloud</p>
           <iframe
             title="soundcloud" 
             width="100%" 
@@ -36,6 +81,19 @@ class App extends Component {
             }}
           >
           </div>
+
+          <button onClick={() => this.handleClick()}>
+            Get List Of Likes
+          </button>
+          
+          <div className="all-liked-tracks-container">
+            {
+            this.state.handleClickBool 
+            ?  this.state.tracks.map((track) => <LikedTrack listOfTracks={track} />)
+            : console.log(this.state.handleClickBool)
+            }
+          </div>
+          
         </div>
         <Footer />
       </>
