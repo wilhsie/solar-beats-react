@@ -31,6 +31,19 @@
   }
 }
 
+.flex-wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.header {
+  padding: 64px;
+  background-color: black;
+  color: white;
+}
+
 .app-container {
   padding: 64px;
 }
@@ -43,6 +56,7 @@ h1 {
   text-align: center;
   font-style: italic;
   padding-bottom: 32px;
+  margin-top: auto;
 }
 
 .all-liked-tracks-container {
@@ -60,4 +74,16 @@ h1 {
 .liked-track-container img {
   width: 256px;
   height: 256px;
+}
+
+.get-likes-button {
+  background-color: #F95738;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  padding: 16px 32px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
 }

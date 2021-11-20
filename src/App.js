@@ -52,50 +52,27 @@ class App extends Component {
   render() {
     return (
       <>
-        <Header />
-        <div className="app-container">
-          <h1>SOLAR BEATS</h1>
-          <h2>Built using React.js and Netlify</h2>
-          <p>Okay, new idea... "SoundCloud Viewer Tool" - Makes it easier to view your liked tracks on soundcloud</p>
-          <iframe
-            title="soundcloud" 
-            width="100%" 
-            height="300" 
-            scrolling="no" 
-            frameborder="no" 
-            allow="autoplay" 
-            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/387123665&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
-          >
-          </iframe>
-          <div 
-            style={{
-              fontSize: '10px',
-              color: '#cccccc',
-              lineBreak: 'anywhere',
-              wordBreak: 'normal',
-              overflow: 'hidden',
-              whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-              fontFamily: 'Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif',
-              fontWeight: 100
-            }}
-          >
+        <div className="flex-wrapper">
+          <Header />
+          <div className="app-container">
+            <p>This site a work in progress, and its only intended use is for testing</p>
+            <p>Currently, it can only retrieve liked tracks of the user designated in the backend</p>
+            <p>Click the button to see all of SHAY LEON's liked tracks</p>
+            <button class="get-likes-button" onClick={() => this.handleClick()}>
+              Get List Of Likes
+            </button>
+            
+            <div className="all-liked-tracks-container">
+              {
+              this.state.handleClickBool 
+              ?  this.state.tracks.map((track) => <LikedTrack listOfTracks={track} />)
+              : console.log(this.state.handleClickBool)
+              }
+            </div>
+            
           </div>
-
-          <button onClick={() => this.handleClick()}>
-            Get List Of Likes
-          </button>
-          
-          <div className="all-liked-tracks-container">
-            {
-            this.state.handleClickBool 
-            ?  this.state.tracks.map((track) => <LikedTrack listOfTracks={track} />)
-            : console.log(this.state.handleClickBool)
-            }
-          </div>
-          
+          <Footer />
         </div>
-        <Footer />
       </>
     )
   }
