@@ -55,8 +55,8 @@ class App extends Component {
         <div className="flex-wrapper">
           <Header />
           <div className="app-container">
-            <p>This site a work in progress, and its only intended use is for testing</p>
-            <p>Currently, it can only retrieve liked tracks of the user designated in the backend</p>
+            <p>This site is a work in progress, and its only intended purpose is for testing</p>
+            <p>Currently, it only retrieves liked tracks of a specific backend-designated user</p>
             <p>Click the button to see all of SHAY LEON's liked tracks</p>
             <button class="get-likes-button" onClick={() => this.handleClick()}>
               Get List Of Likes
